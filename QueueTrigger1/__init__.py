@@ -50,8 +50,7 @@ def main(msg: func.QueueMessage) -> None:
     logging.info(f'Blob url: {source_blob_url} \n'
                  f'Blob checksum: {checksum}')
     
-    is_file_clean = check_file_hash_for_viruses(checksum)
-    if is_file_clean:
+    if check_file_hash_for_viruses(checksum):
         logging.info(f'The uploaded file is safe. Upload it to the second Storage Account.')
 
         # Upload blob
@@ -74,7 +73,7 @@ def main(msg: func.QueueMessage) -> None:
     else:
         logging.warning(f'The uploaded file is infected! It won\'t be uploaded to the second Storage Account, and will be deleted.')
 
-        # TODO necessary steps ifa file is infected (send an alarm, block the user, etc.)
+        # TODO necessary steps if a file is infected (send an alarm, block the user, put the file in quaranteen, etc.)
 
     # Delete original blob
     source_blob_client.delete_blob()
