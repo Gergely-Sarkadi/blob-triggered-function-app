@@ -6,7 +6,7 @@
       "type": "queueTrigger",
       "direction": "in",
       "queueName": "testqueue",
-      "connection": "sablobtriggersourcegergo_STORAGE"
+      "connection": "AzureWebJobsStorage"
     }
   ]
 }

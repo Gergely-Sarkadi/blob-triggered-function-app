@@ -4,13 +4,13 @@ import os
 import vt
 
 import azure.functions as func
-from azure.identity import DefaultAzureCredential
+from azure.identity import ManagedIdentityCredential
 from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
 from urllib.parse import urlparse
 
 
 def get_blob_service_client_token_credential(account_url):
-    credential = DefaultAzureCredential()
+    credential = ManagedIdentityCredential()
     return BlobServiceClient(account_url, credential=credential)
 
 def parse_url(blob_url):
@@ -36,9 +36,11 @@ def check_file_hash_for_viruses(md5_hash):
         return True
 
 def main(msg: func.QueueMessage) -> None:
+    logging.info(f'Function App starts')
+
     # Download and process blob
     source_blob_url = msg.get_json()['data']['blobUrl']
-    # source_account_url = "https://sablobtriggersourcegergo.blob.core.windows.net"
+    # source_account_url = "https://sablobtriggertestsource.blob.core.windows.net"
     # source_blob_service_client = get_blob_service_client_token_credential(source_account_url)
     source_connection_string = os.environ['SOURCE_STORAGE_ACCOUNT_CONN_STRING']
     source_blob_service_client = BlobServiceClient.from_connection_string(source_connection_string)
@@ -54,7 +56,7 @@ def main(msg: func.QueueMessage) -> None:
         logging.info(f'The uploaded file is safe. Upload it to the second Storage Account.')
 
         # Upload blob
-        # target_account_url = "https://sablobtriggertargetgergo.blob.core.windows.net"
+        # target_account_url = "https://sablobtriggertesttarget.blob.core.windows.net"
         # target_blob_service_client = get_blob_service_client_token_credential(target_account_url)
         target_connection_string = os.environ['TARGET_STORAGE_ACCOUNT_CONN_STRING']
         target_blob_service_client = BlobServiceClient.from_connection_string(target_connection_string)
