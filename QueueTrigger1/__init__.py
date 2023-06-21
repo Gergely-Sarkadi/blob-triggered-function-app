@@ -30,7 +30,7 @@ def parse_filename(filename):
 
 def check_file_hash_for_viruses(md5_hash):
     '''
-    end the checksum of the blob to the VirusTotal API for virus checking.
+    Send the checksum of the blob to the VirusTotal API for virus checking.
     Set the API key as an environmental variable of the Function App.
     '''
     client = vt.Client(os.environ['VIRUSTOTAL_API_KEY'])
